@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIP CLIENT | Secure Access</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background:#0b0f15;
+color:white;
+font-family:'Montserrat', sans-serif;
+overflow-x:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(120deg,#ff4d00,#ffae00,#ff2d55);
+background-size:300% 300%;
+animation:bgMove 14s ease infinite;
+opacity:0.05;
+z-index:-1;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.top-brand{
+text-align:center;
+padding-top:40px;
+font-family:'Orbitron', sans-serif;
+font-size:28px;
+font-weight:900;
+letter-spacing:6px;
+color:#ffae00;
+}
+
+.sub-brand{
+text-align:center;
+margin-top:8px;
+font-size:14px;
+letter-spacing:4px;
+color:#888;
+}
+
+.section{
+min-height:60vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:40px 20px;
+}
+
+.section h2{
+font-family:'Orbitron', sans-serif;
+font-size:30px;
+margin-bottom:15px;
+color:#ffae00;
+}
+
+.taglines{
+color:#aaa;
+font-size:15px;
+margin-bottom:30px;
+line-height:1.8;
+}
+
+input{
+width:300px;
+padding:14px;
+border:none;
+border-radius:6px;
+outline:none;
+margin-top:10px;
+font-size:14px;
+background:#121821;
+color:white;
+border:1px solid #1f2630;
+text-align:center;
+}
+
+button{
+margin-top:20px;
+padding:14px 45px;
+border:none;
+border-radius:6px;
+background:#ffae00;
+color:black;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#ff4d00;
+color:white;
+transform:translateY(-3px);
+}
+
+#downloadBtn{
+display:none;
+margin-top:25px;
+text-decoration:none;
+}
+
+.stats{
+padding:60px 20px;
+background:#0f141b;
+text-align:center;
+}
+
+.stats h2{
+font-family:'Orbitron', sans-serif;
+color:#ffae00;
+margin-bottom:40px;
+}
+
+.stat-grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:40px;
+}
+
+.stat{
+background:#121821;
+padding:30px;
+width:220px;
+border-radius:8px;
+border:1px solid #1f2630;
+}
+
+.stat h3{
+font-size:28px;
+color:#ffae00;
+margin-bottom:10px;
+font-family:'Orbitron', sans-serif;
+}
+
+.stat p{
+color:#aaa;
+}
+
+footer{
+text-align:center;
+padding:25px;
+background:#0f141b;
+color:#666;
+font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-brand">DRIP CLIENT</div>
+<div class="sub-brand"> Engineered to Withstand Every Challenge </div>
+
+<section class="section">
+
+<h2>Secure Key Verification</h2>
+
+<div class="taglines">
+✔ Play Smart. Play Safe.<br>
+✔ Performance Meets Protection.<br>
+✔ Built for Stability & Competitive Confidence.
+</div>
+
+<input 
+type="text" 
+id="userKey" 
+placeholder="Enter Access Key"
+maxlength="20"
+oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'')"
+>
+
+<br>
+
+<button onclick="verifyKey()">VERIFY & CONTINUE</button>
+
+<a href="https://www.mediafire.com/file/m50oz62r6x1s89q/DRIP+CLIENT+I+MOBILE+APKMOD+V2.0.apk/file" id="downloadBtn" onclick="handleDownload()">
+<button>DOWNLOAD CLIENT</button>
+</a>
+
+</section>
+
+<section class="stats">
+<h2>Community & Activity</h2>
+
+<div class="stat-grid">
+
+<div class="stat">
+<h3>125K+</h3>
+<p>Registered Players</p>
+</div>
+
+<div class="stat">
+<h3>4.8 ★</h3>
+<p>Community Rating</p>
+</div>
+
+<div class="stat">
+<h3>99.2%</h3>
+<p>Server Stability</p>
+</div>
+
+<div class="stat">
+<h3>24/7</h3>
+<p>Support Access</p>
+</div>
+
+</div>
+
+</section>
+
+<footer>
+© 2026 ZEXISTEY — DRIP CLIENT
+</footer>
+
+<script>
+
+/* Check if already downloaded */
+if(localStorage.getItem("downloaded") === "true"){
+window.location.href = "index.html";
+}
+
+function verifyKey(){
+let key = document.getElementById("userKey").value.trim();
+
+if(key.length >= 10 && key.length <= 20){
+document.getElementById("downloadBtn").style.display = "inline-block";
+}else{
+alert("Key must be 10 to 20 characters (letters & numbers only) ❌");
+}
+}
+
+function handleDownload(){
+localStorage.setItem("downloaded","true");
+
+setTimeout(function(){
+window.location.href = "index.html";
+}, 1000);
+}
+
+</script>
+
+</body>
+</html>
