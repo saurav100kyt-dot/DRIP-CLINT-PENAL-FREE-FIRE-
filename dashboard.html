@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIP PLANT Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background:#0b0f15;
+color:white;
+font-family:'Montserrat', sans-serif;
+text-align:center;
+display:flex;
+flex-direction:column;
+min-height:100vh;
+}
+
+.top-brand{
+padding:30px;
+font-family:'Orbitron', sans-serif;
+font-size:32px;
+font-weight:900;
+letter-spacing:5px;
+color:#ffae00;
+}
+
+.tagline{color:#aaa;margin-bottom:5px;}
+.section{padding:40px 20px;flex:1;}
+
+select,input{
+padding:12px 20px;
+background:#121821;
+border:1px solid #ffae00;
+color:white;
+border-radius:6px;
+font-size:15px;
+margin-top:10px;
+}
+
+.price{
+margin-top:15px;
+font-size:22px;
+color:#ffae00;
+font-family:'Orbitron', sans-serif;
+}
+
+.qr-wrapper{
+display:inline-block;
+padding:8px;
+border-radius:12px;
+background:linear-gradient(45deg,#ff4d00,#ffae00,#ff2d55,#00ffcc);
+background-size:300% 300%;
+animation:borderMove 6s infinite alternate;
+margin-top:20px;
+}
+
+@keyframes borderMove{
+0%{background-position:0% 50%;}
+100%{background-position:100% 50%;}
+}
+
+.qr-wrapper img{
+background:#121821;
+padding:8px;
+border-radius:8px;
+}
+
+.verify-btn,.generate-btn,.copy-btn{
+margin-top:20px;
+padding:14px 40px;
+background:#ffae00;
+border:none;
+border-radius:5px;
+font-weight:600;
+cursor:pointer;
+}
+
+.verify-btn:hover,.generate-btn:hover,.copy-btn:hover{
+background:#ff4d00;
+color:white;
+}
+
+.key-box{
+margin-top:20px;
+font-size:20px;
+color:#00ffcc;
+font-family:'Orbitron', sans-serif;
+letter-spacing:2px;
+}
+
+.hidden{display:none;}
+
+.stats{
+background:#0f141b;
+padding:40px 20px;
+margin-top:30px;
+}
+
+.stat-grid{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:25px;
+}
+
+.stat{
+background:#121821;
+padding:25px;
+width:200px;
+border-radius:8px;
+border:1px solid #1f2630;
+}
+
+.stat h3{
+color:#ffae00;
+font-family:'Orbitron', sans-serif;
+font-size:22px;
+}
+
+footer{
+background:#0f141b;
+color:#666;
+font-size:13px;
+padding:20px;
+margin-top:auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-brand">DRIP CLIENT</div>
+<div class="tagline">Engineered for Premium Access</div>
+<div class="tagline">Secure. Stable. Structured.</div>
+
+<section class="section">
+
+<h2>Select Panel</h2>
+<select id="panelSelect" onchange="updatePrice()">
+<option value="59">1-DAY - ₹59</option>
+<option value="149">7-DAY - ₹149</option>
+<option value="299">Parmanet - ₹299</option>
+</select>
+
+<div class="price" id="priceDisplay">Price: ₹59</div>
+
+<div class="qr-wrapper">
+<img id="qrImage" width="200">
+</div>
+
+<h3 style="margin-top:30px;">Enter UTR (TXN ID )</h3>
+<input type="text" id="utrInput" placeholder="Enter UTR Number">
+<br>
+<button class="verify-btn" onclick="verifyUTR()">Verify UTR</button>
+
+<div id="utrStatus" style="margin-top:10px;color:#ffae00;"></div>
+
+<button class="generate-btn hidden" id="generateBtn" onclick="generateKey()">Generate Key</button>
+
+<div class="key-box" id="keyBox"></div>
+<button class="copy-btn hidden" id="copyBtn" onclick="copyKey()">Copy Key</button>
+
+</section>
+
+<section class="stats">
+<h2 style="color:#ffae00;">Live Platform Stats</h2>
+
+<div class="stat-grid">
+
+<div class="stat">
+<h3 id="livePlayers">0</h3>
+<p>Live Players</p>
+</div>
+
+<div class="stat">
+<h3>125,482+</h3>
+<p>Total Users</p>
+</div>
+
+<div class="stat">
+<h3>4.8 ★</h3>
+<p>Community Rating</p>
+</div>
+
+</div>
+</section>
+
+<footer>
+© 2026 ZEXISTEY — DRIP CLIENT
+</footer>
+
+<script>
+let firstUTR = "";
+let count = 0;
+let generatedKey = "";
+const upiID = "9953794428@pthdfc";  <!-- ✅ UPI Replaced -->
+
+function updatePrice(){
+
+let price = document.getElementById("panelSelect").value;
+document.getElementById("priceDisplay").innerText = "Price: ₹" + price;
+
+let upiLink = `upi://pay?pa=${upiID}&pn=DRIPPLANT&am=${price}&cu=INR`;
+let encodedLink = encodeURIComponent(upiLink);
+let qrURL = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodedLink}`;
+
+document.getElementById("qrImage").src = qrURL;
+}
+
+updatePrice();
+
+function verifyUTR(){
+let utr = document.getElementById("utrInput").value.trim();
+let status = document.getElementById("utrStatus");
+
+if(utr === ""){
+status.innerText = "Please enter UTR";
+return;
+}
+
+if(firstUTR === ""){
+firstUTR = utr;
+count = 1;
+status.innerText = "1/3 Verified";
+}
+else{
+if(utr === firstUTR){
+count++;
+status.innerText = count + "/3 Verified";
+
+if(count === 3){
+status.innerText = "UTR Verified Successfully!";
+document.getElementById("generateBtn").classList.remove("hidden");
+}
+}
+else{
+count = 0;
+firstUTR = "";
+status.innerText = "UTR Mismatch! Start Again.";
+}
+}
+
+document.getElementById("utrInput").value="";
+}
+
+function generateKey(){
+let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+generatedKey = "";
+for(let i=0;i<16;i++){
+generatedKey += chars.charAt(Math.floor(Math.random()*chars.length));
+}
+document.getElementById("keyBox").innerText = generatedKey;
+document.getElementById("copyBtn").classList.remove("hidden");
+}
+
+function copyKey(){
+navigator.clipboard.writeText(generatedKey).then(function(){
+window.location.href = "page3.html";
+});
+}
+
+function updateLivePlayers(){
+let random = Math.floor(Math.random()*5000)+1500;
+document.getElementById("livePlayers").innerText = random.toLocaleString();
+}
+
+setInterval(updateLivePlayers,3000);
+updateLivePlayers();
+</script>
+
+</body>
+</html>
